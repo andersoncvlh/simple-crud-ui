@@ -1,0 +1,45 @@
+<div class="container-fluid" >
+  <div class="col col-12" >
+    <h1>Listagem de Pessoas</h1>
+  </div>
+
+  <div class="col col-12" >
+    <form [formGroup]="pessoaForm" >
+      <div class="form-row">
+        <div class="col-8">
+          <input type="text" class="form-control" placeholder="Nome" formControlName="nome" >
+        </div>
+        <div class="col-2">
+          <input type="text" class="form-control" placeholder="CPF" formControlName="cpf" >
+        </div>
+        <div class="col-2">
+          <div class="btn-group" role="group">
+              <button type="button" class="btn ">Pesquisar</button>
+              <button type="button" class="btn btn-secondary">Cadastrar</button>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col col-12" >
+    <table id="pessoas" class="table table-striped table-bordered" style="width:100%" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>CPF</th>
+          <th>Idade</th>
+          <th>Quantidade de Telefones</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
