@@ -54,7 +54,7 @@
           <td>{{ p.qtdTels }}</td>
           <td>
             <div class="btn-group" role="group">
-              <button type="button" class="btn btn-light">
+              <button type="button" class="btn btn-light" [routerLink]="['/pessoa', p.id]" >
                 <i class="fa fa-pencil"></i>
               </button>
               <button type="button" class="btn btn-danger" (click)="open(modalExcluir, p)" >

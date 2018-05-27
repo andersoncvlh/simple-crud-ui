@@ -39,7 +39,6 @@ export class PessoaService {
   }
 
   salvar(pessoa: Pessoa): Observable<Pessoa>  {
-    console.log(pessoa);
     return this.http.post<Pessoa>(`${CRUD_APP}/pessoa/`, pessoa)
       .pipe(catchError(this.handleError));
   }
@@ -48,6 +47,14 @@ export class PessoaService {
     return this.http.delete(`${CRUD_APP}/pessoa/${id}`)
       .pipe(
         map(pessoaSalva => pessoaSalva),
+        catchError(this.handleError)
+      );
+  }
+
+  pesquisarPorId(id: string): Observable<Pessoa> {
+    return this.http.get<Pessoa>(`${CRUD_APP}/pessoa/${id}`)
+      .pipe(
+        map(data => data),
         catchError(this.handleError)
       );
   }

@@ -1,11 +1,13 @@
 import { Pessoa } from './../../models/pessoa';
 import { Telefone } from './../../models/telefone';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { PessoaService } from '../pessoa.service';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap } from 'rxjs/operators';
+import { Subscriber, Observable } from 'rxjs';
 
 @Component({
   selector: 'oak-pessoa-cadastro',
@@ -21,6 +23,10 @@ export class PessoaCadastroComponent implements OnInit {
   minDate: Date = void 0;
   maxDate: Date = void 0;
 
+  isEdit = false;
+
+  pageTitle = 'Cadastro Pessoa';
+
   // tslint:disable-next-line:max-line-length
   emailPattern = Validators.pattern(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
   numberPattern = Validators.pattern(/^[0-9]*$/);
@@ -28,7 +34,9 @@ export class PessoaCadastroComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private pessoaService: PessoaService,
-    private router: Router
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private zone: NgZone
   ) {
     this.pessoaCadForm = this.fb.group({
       nome: ['', Validators.required],
@@ -46,6 +54,21 @@ export class PessoaCadastroComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.zone.run(() => {
+      if (this.activatedRoute.snapshot.params && this.activatedRoute.snapshot.params.id) {
+        const id = this.activatedRoute.snapshot.params.id;
+        this.isEdit = true;
+        this.pageTitle = 'Atualizar Pessoa';
+        this.pesquisarPorId(id);
+      }
+    });
+  }
+
+  private pesquisarPorId(id: string) {
+    this.pessoaService.pesquisarPorId(id).toPromise()
+      .then((p) => {
+        console.log(p);
+      });
   }
 
   salvar() {
@@ -77,7 +100,6 @@ export class PessoaCadastroComponent implements OnInit {
     const dia: number = this.pessoaCadForm.get('dataNascimento').value.day;
     return new Date(ano, mes, dia);
   }
-
 
 
 }
