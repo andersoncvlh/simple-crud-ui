@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { Pessoa } from './../pessoa';
 import { PessoaService, PessoaFiltro } from './../pessoa.service';
 import { map } from 'rxjs/operators';
 import { Page } from '../../models/page';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Pessoa } from '../../models/pessoa';
 
 @Component({
   selector: 'oak-pessoa-listagem',

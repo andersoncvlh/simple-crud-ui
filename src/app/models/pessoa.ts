@@ -1,3 +1,6 @@
+import { Telefone } from './telefone';
+
+
 export class Pessoa {
   id?: number;
   nome: string;
@@ -6,5 +9,6 @@ export class Pessoa {
   qtdTels?: number;
   email?: string;
   dataNascimento: Date;
+  telefones: Telefone[] = [];
 }
 

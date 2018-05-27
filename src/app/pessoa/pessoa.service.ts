@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 
 import { CRUD_APP } from '../app.api';
 import { Page } from '../models/page';
-import { Pessoa } from './pessoa';
+import { Pessoa } from '../models/pessoa';
 
 export class PessoaFiltro {
   pagina = 0;
@@ -39,7 +39,7 @@ export class PessoaService {
   }
 
   salvar(pessoa: Pessoa): Observable<Pessoa>  {
-    console.log(JSON.stringify(pessoa));
+    console.log(pessoa);
     return this.http.post<Pessoa>(`${CRUD_APP}/pessoa/`, pessoa)
       .pipe(catchError(this.handleError));
   }
