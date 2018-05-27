@@ -14,6 +14,7 @@ import { MenuComponent } from './menu/menu.component';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada/pagina-nao-encontrada.component';
 import { FooterComponent } from './footer/footer.component';
 import { PessoaModule } from './pessoa/pessoa.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -27,10 +28,9 @@ import { PessoaModule } from './pessoa/pessoa.module';
     NgbModule.forRoot(),
     BrowserModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
 
+    CoreModule,
     PessoaModule,
     AppRoutingModule,
   ],

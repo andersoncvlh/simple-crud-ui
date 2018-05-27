@@ -18,25 +18,27 @@ export class PessoaListagemComponent implements OnInit {
 
   @Input() currentPage;
 
+  cpfPattern = Validators.pattern('^([0-9]){3}\.([0-9]){3}\.([0-9]){3}-([0-9]){2}$');
+
   constructor(
     private fb: FormBuilder,
     private pessoaService: PessoaService
   ) {
     this.pessoaForm = this.fb.group({
-      nome: ['', Validators.required],
-      cpf: ['', Validators.required]
+      nome: [''],
+      cpf: ['', this.cpfPattern]
     });
+    this.currentPage = 1;
   }
 
   ngOnInit() {
   }
 
   pesquisar() {
+    console.log(this.pessoaForm);
     const pessoaFiltro: PessoaFiltro = this.pessoaForm.value;
-    if (this.currentPage) {
-      pessoaFiltro.pagina = this.currentPage - 1;
-      pessoaFiltro.itensPorPagina = 20;
-    }
+    pessoaFiltro.pagina = this.currentPage - 1;
+    pessoaFiltro.itensPorPagina = 20;
     this.pessoaService.pesquisar(pessoaFiltro)
       .subscribe((data) => {
         this.page = data;
