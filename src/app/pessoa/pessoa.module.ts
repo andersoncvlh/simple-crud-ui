@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { PessoaRoutingModule } from './pessoa-routing.module';
@@ -12,6 +12,9 @@ import { PessoaListagemComponent } from './pessoa-listagem/pessoa-listagem.compo
     NgbModule,
     CommonModule,
     ReactiveFormsModule,
+
+    NgbPaginationModule,
+
     PessoaRoutingModule
   ],
   declarations: [PessoaCadastroComponent, PessoaListagemComponent]
