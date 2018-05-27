@@ -2,6 +2,9 @@ export class Pessoa {
   id?: number;
   nome: string;
   cpf: string;
-  idade?: Date;
+  idade?: number;
   qtdTels?: number;
+  email?: string;
+  dataNascimento: Date;
 }
+

@@ -1,3 +1,58 @@
-<p>
-  pessoa-cadastro works!
-</p>
+<div class="row-fluid" >
+  <div class="col col-12" >
+    <h1>Cadastro de Pessoas</h1>
+    <hr>
+  </div>
+
+  <div class="col col-12" >
+    <form [formGroup]="pessoaCadForm" >
+      <div class="row" >
+        <div class="col col-md-6 col-sm-12" >
+          <oak-input errorMessage="Campo obrigatório." label="Nome">
+            <input type="text" class="form-control" placeholder="Nome"
+              formControlName="nome"
+              [class.is-valid]="pessoaCadForm.get('nome').valid && (pessoaCadForm.get('nome').dirty || pessoaCadForm.get('nome').touched)"
+              [class.is-invalid]="!pessoaCadForm.get('nome').valid && (pessoaCadForm.get('nome').dirty || pessoaCadForm.get('nome').touched)" >
+          </oak-input>
+        </div>
+      </div>
+      <div class="row" >
+        <div class="col col-md-6 col-sm-12" >
+          <oak-input errorMessage="Campo obrigatório. Digite somente números e no máximo de 11." label="CPF">
+            <input type="text" class="form-control" placeholder="CPF"
+              formControlName="cpf"
+              [class.is-valid]="pessoaCadForm.get('cpf').valid && (pessoaCadForm.get('cpf').dirty || pessoaCadForm.get('cpf').touched)"
+              [class.is-invalid]="!pessoaCadForm.get('cpf').valid && (pessoaCadForm.get('cpf').dirty || pessoaCadForm.get('cpf').touched)" >
+          </oak-input>
+        </div>
+      </div>
+      <div class="row" >
+        <div class="col col-md-6 col-sm-12" >
+          <oak-input  errorMessage="E-mail inválido." label="E-mail">
+            <input type="text" class="form-control" placeholder="E-mail"
+              formControlName="email"
+              [class.is-valid]="pessoaCadForm.get('email').valid && (pessoaCadForm.get('email').dirty || pessoaCadForm.get('email').touched)"
+              [class.is-invalid]="!pessoaCadForm.get('email').valid && (pessoaCadForm.get('email').dirty || pessoaCadForm.get('email').touched)" >
+          </oak-input>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="col col-md-2 col-sm-12">
+          <div class="input-group">
+            <ngb-datepicker formControlName="dataNascimento" (navigate)="date = $event.next"></ngb-datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="row" >
+        <div class="col" >
+          <div class="btn-group" role="group">
+            <button type="button" class="btn" (click)="salvar()" [disabled]="!pessoaCadForm.valid" [title]="!pessoaCadForm.valid ? 'Preencha os campos obrigatórios' : 'Salvar'" >Salvar</button>
+            <button type="button" class="btn btn-secondary" routerLink="/pessoa" >Voltar</button>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

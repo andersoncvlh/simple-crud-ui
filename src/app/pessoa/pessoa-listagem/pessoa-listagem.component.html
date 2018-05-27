@@ -1,6 +1,7 @@
 <div class="row-fluid" >
   <div class="col col-12" >
     <h1>Listagem de Pessoas</h1>
+    <hr>
   </div>
 
   <div class="col col-12" >
@@ -10,8 +11,7 @@
           <input type="text" class="form-control" placeholder="Nome" formControlName="nome" >
         </div>
         <div class="col-2">
-          <oak-input errorMessage="CPF no formato inválido." label="CPF">
-            {{hasSuccessChild}}
+          <oak-input errorMessage="Digite somente números e no máximo de 11." label="CPF">
             <input type="text" class="form-control" placeholder="CPF"
               formControlName="cpf"
               [class.is-valid]="pessoaForm.get('cpf').valid && (pessoaForm.get('cpf').dirty || pessoaForm.get('cpf').touched)"
@@ -20,14 +20,18 @@
         </div>
         <div class="col-2">
           <div class="btn-group" role="group">
-            <button type="button" class="btn" (click)="pesquisar()" [disabled]="!pessoaForm.valid" >Pesquisar</button>
+            <button type="button" class="btn" (click)="pesquisar('1')" [disabled]="!pessoaForm.valid" >Pesquisar</button>
             <button type="button" class="btn btn-secondary" routerLink="/pessoa/novo" >Cadastrar</button>
           </div>
         </div>
       </div>
     </form>
   </div>
-  <div class="col col-12" *ngIf="page.totalElements > 0" >
+  <!--Table-->
+  <div *ngIf="!page?.totalElements" class="alert alert-light" role="alert">
+    Nenhuma pessoa encontrada.
+  </div>
+  <div class="col col-12" *ngIf="page?.totalElements > 0" >
     <table id="pessoas" class="table table-striped table-bordered" style="width:100%" >
       <thead>
         <tr>
@@ -41,7 +45,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of page.content" >
+        <tr *ngFor="let p of page?.content" >
           <td>{{ p.id }}</td>
           <td>{{ p.nome }}</td>
           <td>{{ p.email }}</td>
@@ -50,21 +54,46 @@
           <td>{{ p.qtdTels }}</td>
           <td>
             <div class="btn-group" role="group">
-              <button type="button" class="btn btn-light">Editar</button>
-              <button type="button" class="btn btn-danger">Remover</button>
+              <button type="button" class="btn btn-light">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button type="button" class="btn btn-danger" (click)="open(modalExcluir, p)" >
+                  <i class="fa fa-trash"></i>
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
-      <ngb-pagination *ngIf="page.totalPages > 0"
-        [collectionSize]="page.totalElements"
+      <ngb-pagination *ngIf="page?.totalPages > 0"
+        [collectionSize]="page?.totalElements"
         [(page)]="currentPage"
-        [pageSize]="page.size"
+        [pageSize]="page?.size"
         [maxSize]="5"
         [boundaryLinks]="true"
         (pageChange)="pesquisar()">
       </ngb-pagination>
     </table>
   </div>
+  <!--Modal-->
+  <ng-template #modalExcluir let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Deseja mesmo excluir?</h4>
+      <button type="button" class="close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>O usuário {{pessoaSelecionada?.nome}} de CPF: {{pessoaSelecionada?.cpf}} será excluída.</p>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-danger" (click)="remover(pessoaSelecionada); c('Close click');" aria-label="Cancelar">
+          Excluir
+        </button>
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+      </div>
+    </div>
+  </ng-template>
 
 </div>
+
