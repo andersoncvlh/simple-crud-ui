@@ -34,7 +34,7 @@ export class PessoaCadastroComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private pessoaService: PessoaService,
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
     private zone: NgZone
   ) {
@@ -54,21 +54,12 @@ export class PessoaCadastroComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.zone.run(() => {
-      if (this.activatedRoute.snapshot.params && this.activatedRoute.snapshot.params.id) {
-        const id = this.activatedRoute.snapshot.params.id;
-        this.isEdit = true;
-        this.pageTitle = 'Atualizar Pessoa';
-        this.pesquisarPorId(id);
-      }
-    });
-  }
-
-  private pesquisarPorId(id: string) {
-    this.pessoaService.pesquisarPorId(id).toPromise()
-      .then((p) => {
-        console.log(p);
-      });
+    if (this.route.snapshot.params && this.route.snapshot.params.id) {
+      const id = this.route.snapshot.params.id;
+      this.isEdit = true;
+      this.pageTitle = 'Atualizar Pessoa';
+      this.pesquisarPorId(id);
+    }
   }
 
   salvar() {
@@ -92,6 +83,22 @@ export class PessoaCadastroComponent implements OnInit {
   removerTelefone(telefone: Telefone) {
     const index = this.pessoaSelecionada.telefones.indexOf(telefone);
     this.pessoaSelecionada.telefones.splice(index, 1);
+  }
+
+  private pesquisarPorId(id: string) {
+    this.pessoaService.pesquisarPorId(id)
+      .subscribe((p) => {
+        console.log(p);
+        this.pessoaCadForm.get('nome').setValue(p.nome);
+        this.pessoaCadForm.get('cpf').setValue(p.cpf);
+        this.pessoaCadForm.get('email').setValue(p.email);
+        this.pessoaCadForm.get('dataNascimento').setValue(p.dataNascimento);
+
+        if (!this.pessoaSelecionada) {
+          this.pessoaSelecionada = new Pessoa();
+        }
+        this.pessoaSelecionada.telefones = p.telefones;
+      });
   }
 
   private getDateNascimentoFromComponent(): Date {
