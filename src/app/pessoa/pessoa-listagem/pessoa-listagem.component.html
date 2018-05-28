@@ -21,6 +21,7 @@
         <div class="col-2">
           <div class="btn-group" role="group">
             <button type="button" class="btn" (click)="pesquisar('1')" [disabled]="!pessoaForm.valid" >Pesquisar</button>
+            <button type="button" class="btn btn-secondary" (click)="pessoaForm.reset()" >Limpar</button>
             <button type="button" class="btn btn-secondary" routerLink="/pessoa/novo" >Cadastrar</button>
           </div>
         </div>

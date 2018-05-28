@@ -8,6 +8,7 @@ import { PessoaService } from '../pessoa.service';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { switchMap } from 'rxjs/operators';
 import { Subscriber, Observable } from 'rxjs';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 
 @Component({
   selector: 'oak-pessoa-cadastro',
@@ -20,8 +21,8 @@ export class PessoaCadastroComponent implements OnInit {
 
   pessoaSelecionada: Pessoa = new Pessoa();
 
-  minDate: Date = void 0;
-  maxDate: Date = void 0;
+  minDate: NgbDate;
+  maxDate: NgbDate;
 
   isEdit = false;
 
@@ -48,9 +49,9 @@ export class PessoaCadastroComponent implements OnInit {
       ddd: ['', [this.numberPattern, Validators.required, Validators.maxLength(2), Validators.minLength(2)]],
       numero: ['', [this.numberPattern, Validators.required, Validators.maxLength(9), Validators.minLength(8)]]
     });
-    this.minDate = new Date(1950, 1, 1);
     const hoje = new Date();
-    this.maxDate = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDay());
+    this.minDate = new NgbDate(1950, 1, hoje.getUTCDay());
+    this.maxDate = new NgbDate(hoje.getFullYear(), hoje.getMonth() + 1, hoje.getUTCDay());
   }
 
   ngOnInit() {
@@ -68,8 +69,19 @@ export class PessoaCadastroComponent implements OnInit {
     pessoa.dataNascimento = this.getDateNascimentoFromComponent();
     return this.pessoaService.salvar(pessoa)
       .subscribe(pessoaSalva => {
-        this.router.navigate(['/pessoa']);
+        this.router.navigate(['/pessoa', {'nome': pessoaSalva.nome, 'cpf': pessoaSalva.cpf}]);
         return pessoaSalva;
+      });
+  }
+
+  atualizar() {
+    const pessoa: Pessoa = this.pessoaCadForm.value;
+    pessoa.telefones = this.pessoaSelecionada.telefones;
+    pessoa.id = this.pessoaSelecionada.id;
+    pessoa.dataNascimento = this.getDateNascimentoFromComponent();
+    this.pessoaService.atualizar(pessoa)
+      .subscribe((pessoaAtualizada) => {
+        this.router.navigate(['/pessoa', {'nome': pessoaAtualizada.nome, 'cpf': pessoaAtualizada.cpf}]);
       });
   }
 
@@ -85,19 +97,33 @@ export class PessoaCadastroComponent implements OnInit {
     this.pessoaSelecionada.telefones.splice(index, 1);
   }
 
+  limparForms() {
+    this.pessoaCadForm.reset();
+    this.telefonesForm.reset();
+    if (this.pessoaSelecionada) {
+      this.pessoaSelecionada.telefones = [];
+    }
+  }
+
   private pesquisarPorId(id: string) {
     this.pessoaService.pesquisarPorId(id)
       .subscribe((p) => {
-        console.log(p);
+        const data = new Date(p.dataNascimento);
+
         this.pessoaCadForm.get('nome').setValue(p.nome);
         this.pessoaCadForm.get('cpf').setValue(p.cpf);
         this.pessoaCadForm.get('email').setValue(p.email);
-        this.pessoaCadForm.get('dataNascimento').setValue(p.dataNascimento);
+        this.pessoaCadForm.get('dataNascimento').setValue(new NgbDate(
+          data.getFullYear(),
+          data.getMonth(),
+          data.getDay())
+        );
 
         if (!this.pessoaSelecionada) {
           this.pessoaSelecionada = new Pessoa();
         }
         this.pessoaSelecionada.telefones = p.telefones;
+        this.pessoaSelecionada.id = p.id;
       });
   }
 

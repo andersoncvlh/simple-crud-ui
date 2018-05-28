@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Page } from '../../models/page';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Pessoa } from '../../models/pessoa';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'oak-pessoa-listagem',
@@ -29,16 +30,27 @@ export class PessoaListagemComponent implements OnInit {
     private fb: FormBuilder,
     private pessoaService: PessoaService,
     private modalService: NgbModal,
+    private route: ActivatedRoute,
     private zone: NgZone
   ) {
     this.pessoaForm = this.fb.group({
       nome: [''],
-      cpf: ['', [this.numberPattern, Validators.maxLength(11)]]
+      cpf: ['', [this.numberPattern, Validators.minLength(11), Validators.maxLength(11)]]
     });
     this.currentPage = 1;
   }
 
   ngOnInit() {
+    if (this.route.snapshot.params && this.route.snapshot.params.searchAll) {
+      this.pesquisar();
+    } else if (this.route.snapshot.params
+      && this.route.snapshot.params.nome
+      && this.route.snapshot.params.cpf
+    ) {
+      this.pessoaForm.get('nome').setValue(this.route.snapshot.params.nome);
+      this.pessoaForm.get('cpf').setValue(this.route.snapshot.params.cpf);
+      this.pesquisar();
+    }
   }
 
   pesquisar(numeroPagina?: number) {

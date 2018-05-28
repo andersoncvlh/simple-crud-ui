@@ -51,6 +51,12 @@ export class PessoaService {
       );
   }
 
+  atualizar(pessoa: Pessoa): Observable<Pessoa> {
+    console.log('atualiza');
+    return this.http.put<Pessoa>(`${CRUD_APP}/pessoa/${pessoa.id}`, pessoa)
+      .pipe(map(data => data));
+  }
+
   pesquisarPorId(id: string): Observable<Pessoa> {
     return this.http.get<Pessoa>(`${CRUD_APP}/pessoa/${id}`)
       .pipe(
